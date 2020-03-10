@@ -4,11 +4,9 @@
 #include "esp_system.h"
 #include "esp_spi_flash.h"
 #include "driver/gpio.h"
-#include "sdkconfig.h"
-#include "livolo.h"
 #include "reset_task.h"
 
-#define RF_GPIO CONFIG_DATA_GPIO
+//#define RF_GPIO CONFIG_DATA_GPIO
 #define SET_GPIO CONFIG_SET_GPIO
 
 extern "C" {
@@ -16,9 +14,17 @@ void app_main(void);
 }
 
 void app_main() {
+    init_factory_reset_task(static_cast<gpio_num_t>(SET_GPIO));
+
+
+
+
+
+
+//    return;
+    /*
     printf("Hello world!\n");
 
-    /* Print chip information */
     esp_chip_info_t chip_info;
     esp_chip_info(&chip_info);
     printf("This is ESP32 chip with %d CPU cores, WiFi%s%s, ",
@@ -44,16 +50,17 @@ void app_main() {
     esp_restart();
 
 //    gpio_pad_select_gpio(RF_GPIO);
-//    /* Set the GPIO as a push/pull output */
+//    // Set the GPIO as a push/pull output
 //    gpio_set_direction(static_cast<gpio_num_t>(RF_GPIO), GPIO_MODE_OUTPUT);
 //    while(true) {
-//        /* Blink off (output low) */
+//        // Blink off (output low)
 //        printf("Turning off the LED\n");
 //        gpio_set_level(static_cast<gpio_num_t>(RF_GPIO), 0);
 //        vTaskDelay(1000 / portTICK_PERIOD_MS);
-//        /* Blink on (output high) */
+//        // Blink on (output high)
 //        printf("Turning on the LED\n");
 //        gpio_set_level(static_cast<gpio_num_t>(RF_GPIO), 1);
 //        vTaskDelay(1000 / portTICK_PERIOD_MS);
 //    }
+*/
 }

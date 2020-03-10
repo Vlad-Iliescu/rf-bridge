@@ -3,6 +3,6 @@ idf_component_register(SRCS
         "livolo.h"
         "livolo.cpp"
         "reset_task.h"
-        "reset_task.c"
+        "reset_task.cpp"
 
         INCLUDE_DIRS "")

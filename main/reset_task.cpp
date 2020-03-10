@@ -1,18 +1,21 @@
 #include <esp_system.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+#include <freertos/event_groups.h>
+#include <esp_log.h>
 
-#include "app.h"
-#include "credentials_store.h"
 #include "reset_task.h"
+#include "sdkconfig.h"
+#include "livolo.h"
+
+#define APP_UNUSED(x) (void)(x)
 
 /**
  * @param reset_handle handler for factory_reset
  */
 #define TAG "[RESET TASK]"
 
-DRAM_ATTR int state;
-DRAM_ATTR time_t now;
+EventGroupHandle_t app_event_group;
 
 /**
  * Waits for the reset bit. Then cleans all saved credentials and restarts the board.
@@ -21,26 +24,22 @@ DRAM_ATTR time_t now;
 static void factory_reset_task(void *args) {
     APP_UNUSED(args);
 
+    app_event_group = xEventGroupCreate();
+
     while (true) {
-        EventBits_t uxBits = xEventGroupWaitBits(app_event_group,
-                                                 (RESET_BIT | REBOOT_BIT) /*bits*/,
+        xEventGroupWaitBits(app_event_group,
+                                                 BIT9 /*bits*/,
                                                  false /* clear it */,
                                                  false, /* wait for all*/
                                                  portMAX_DELAY /* delay */
         );
 
-        if ((uxBits & RESET_BIT) != 0) {
-            ESP_LOGI(TAG, "Reset requested");
-            credentials_store_clear();
-            esp_restart();
-        }
-
-        if ((uxBits & REBOOT_BIT) != 0) {
-            ESP_LOGI(TAG, "Reboot requested");
-            esp_restart();
-        }
+        Livolo livolo(static_cast<gpio_num_t>(CONFIG_DATA_GPIO));
+        livolo.sendButton(19787, 8);
 
         vTaskDelay(50 / portTICK_RATE_MS);
+
+        xEventGroupClearBits(app_event_group, BIT9);
 
     }
     vTaskDelete(NULL);
@@ -56,30 +55,17 @@ static void factory_reset_task(void *args) {
 static void IRAM_ATTR pinhandler(void *args) {
     APP_UNUSED(args);
 
-    int new_state = gpio_get_level(DEVICE_FACTORY_RESET_PIN);
-    if (new_state == state) {
+    int new_state = gpio_get_level(static_cast<gpio_num_t>(CONFIG_SET_GPIO));
+    if (new_state == 1) {
         // half bouncing same state
         return;
     }
 
-    // check state
-    state = new_state;
-    if (state == 0) { // button pressed
-        now = time(NULL);
-    } else { // button released
-        if (time(NULL) - now >= 4 /* time to hold until reset in secs */) {
-            xEventGroupSetBitsFromISR(app_event_group, RESET_BIT, NULL);
-        } else {
-            xEventGroupSetBitsFromISR(app_event_group, REBOOT_BIT, NULL);
-        }
-    }
+    xEventGroupSetBitsFromISR(app_event_group, BIT9, NULL);
 }
 
 void init_factory_reset_task(gpio_num_t reset_pin) {
     ESP_LOGI(TAG, "Setting up factory reset...");
-
-    state = 1; // button start as high
-    now = time(NULL);
 
     gpio_pad_select_gpio(reset_pin);
     ESP_ERROR_CHECK(gpio_set_direction(reset_pin, GPIO_MODE_INPUT));
