@@ -3,6 +3,9 @@ idf_component_register(SRCS
         interfaces/Task.h
         interfaces/Task.cpp
 
+        Async.h
+        Async.cpp
+
         "livolo.h"
         "livolo.cpp"
         "reset_task.h"

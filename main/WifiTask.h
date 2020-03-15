@@ -6,7 +6,7 @@
 #include "esp_event_base.h"
 #include "interfaces/Task.h"
 
-class WifiTask : Task {
+class WifiTask : public Task {
 public:
     WifiTask(const char *ssid, const char *password);
 

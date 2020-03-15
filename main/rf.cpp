@@ -4,6 +4,7 @@
 #include "driver/gpio.h"
 #include "common.h"
 #include "WifiTask.h"
+#include "Async.h"
 #include <nvs.h>
 #include <nvs_flash.h>
 
@@ -33,7 +34,12 @@ void app_main() {
 
     ESP_LOGI(TAG, "Connected? %i", wifiTask->isConnected());
 
+    auto * async = new Async();
+    xTaskCreate(Async::runAsync, "uart_read_task", 1 << 14 /* 16384 */, async, 5, NULL);
+
+
     vTaskDelay(10000 / portTICK_PERIOD_MS);
+
 
 
 //    return;
