@@ -1,24 +1,39 @@
-#include <cstdio>
 #include "freertos/FreeRTOS.h"
+#include <esp_log.h>
 #include "freertos/task.h"
-#include "esp_system.h"
-#include "esp_spi_flash.h"
 #include "driver/gpio.h"
-#include "reset_task.h"
+#include "common.h"
+#include "WifiTask.h"
+#include <nvs.h>
+#include <nvs_flash.h>
 
 //#define RF_GPIO CONFIG_DATA_GPIO
 #define SET_GPIO CONFIG_SET_GPIO
+#define TAG "[Main]"
 
 extern "C" {
 void app_main(void);
 }
 
 void app_main() {
-    init_factory_reset_task(static_cast<gpio_num_t>(SET_GPIO));
+    ESP_LOGI(TAG, "START");
+//    init_factory_reset_task(static_cast<gpio_num_t>(SET_GPIO));
 
 
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
 
+    auto wifiTask = new WifiTask(IT_WIFI_SSID, IT_WIFI_PASS);
+    wifiTask->run();
+    wifiTask->wait_until_connected(10 * 1000);
 
+    ESP_LOGI(TAG, "Connected? %i", wifiTask->isConnected());
+
+    vTaskDelay(10000 / portTICK_PERIOD_MS);
 
 
 //    return;

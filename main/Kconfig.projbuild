@@ -22,4 +22,15 @@ menu "RF Transmitter"
 
             GPIOs 35-39 are input-only so cannot be used as outputs.
 
+    config SSID
+        string "SSID"
+        default "SSID"
+        help
+            SSID
+
+    config PASS
+        string "PASS"
+        default "pass"
+        help
+            PASS
 endmenu
