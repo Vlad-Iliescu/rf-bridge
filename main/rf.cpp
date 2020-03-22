@@ -6,12 +6,19 @@
 #include "WifiTask.h"
 #include "Async.h"
 #include "MqttTask.h"
+#include "LivoloRFTask.h"
 #include <nvs.h>
 #include <nvs_flash.h>
 
 //#define RF_GPIO CONFIG_DATA_GPIO
 #define SET_GPIO CONFIG_SET_GPIO
 #define TAG "[Main]"
+#define QUEUE_SIZE 10
+
+typedef struct {
+    const char *topic_name;
+    char *topic_data;
+} publish_message_t;
 
 extern "C" {
 void app_main(void);
@@ -35,10 +42,15 @@ void app_main() {
 
     ESP_LOGI(TAG, "Connected? %i", wifiTask->isConnected());
 
-    auto mqttTask = new MqttTask("mqtt://80.241.216.84");
-    mqttTask->run();
+    xQueueHandle mqtt_queue = xQueueCreate(QUEUE_SIZE, sizeof(publish_message_t));
 
-    auto * async = new Async();
+//    auto mqttTask = new MqttTask("mqtt://80.241.216.84");
+//    mqttTask->run();
+
+    auto livolo = new LivoloRFTask(static_cast<gpio_num_t>(32));
+    livolo->sendSignal(19787, 8);
+
+    auto *async = new Async();
     xTaskCreate(Async::runAsync, "uart_read_task", 1 << 14 /* 16384 */, async, 5, NULL);
 
 

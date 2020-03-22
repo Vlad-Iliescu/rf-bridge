@@ -9,6 +9,9 @@ idf_component_register(SRCS
         MqttTask.h
         MqttTask.cpp
 
+        LivoloRFTask.h
+        LivoloRFTask.cpp
+
         "livolo.h"
         "livolo.cpp"
         "reset_task.h"
