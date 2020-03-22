@@ -6,6 +6,9 @@ idf_component_register(SRCS
         Async.h
         Async.cpp
 
+        MqttTask.h
+        MqttTask.cpp
+
         "livolo.h"
         "livolo.cpp"
         "reset_task.h"

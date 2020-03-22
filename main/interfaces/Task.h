@@ -9,7 +9,7 @@ class Task {
 public:
     virtual void run() = 0;
 
-    static void runAsync(void *data);
+    static void runAsync(void *self);
 };
 
 #endif //HELLO_WORLD_TASK_H

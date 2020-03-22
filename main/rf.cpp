@@ -5,6 +5,7 @@
 #include "common.h"
 #include "WifiTask.h"
 #include "Async.h"
+#include "MqttTask.h"
 #include <nvs.h>
 #include <nvs_flash.h>
 
@@ -33,6 +34,9 @@ void app_main() {
     wifiTask->wait_until_connected(10 * 1000);
 
     ESP_LOGI(TAG, "Connected? %i", wifiTask->isConnected());
+
+    auto mqttTask = new MqttTask("mqtt://80.241.216.84");
+    mqttTask->run();
 
     auto * async = new Async();
     xTaskCreate(Async::runAsync, "uart_read_task", 1 << 14 /* 16384 */, async, 5, NULL);
