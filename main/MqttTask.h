@@ -3,19 +3,20 @@
 
 #include "interfaces/Task.h"
 #include "mqtt_client.h"
+#include "MqttQueue.h"
 
 class MqttTask : public Task {
 public:
-    explicit MqttTask(const char *url);
+    explicit MqttTask(const char *url, MqttQueue *queue);
 
     void run() override;
 
 private:
     const char *url;
 
-    static void event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data);
+    MqttQueue *queue;
 
-    static esp_err_t event_handler_cb(esp_mqtt_event_handle_t event);
+    static void event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data);
 };
 
 

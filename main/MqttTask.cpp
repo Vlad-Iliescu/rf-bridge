@@ -12,21 +12,20 @@ void MqttTask::run() {
 
     esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);
     esp_mqtt_client_register_event(client, static_cast<esp_mqtt_event_id_t>(ESP_EVENT_ANY_ID), MqttTask::event_handler,
-                                   client);
+                                   this->queue);
     esp_mqtt_client_start(client);
 
     vTaskDelete(nullptr);
 }
 
-MqttTask::MqttTask(const char *url) : url(url) {}
+MqttTask::MqttTask(const char *url, MqttQueue *queue) : url(url), queue(queue) {}
 
 void MqttTask::event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data) {
+    auto *queue = static_cast<MqttQueue *>(handler_args);
     ESP_LOGD(TAG, "Event dispatched from event loop base=%s, event_id=%d", base, event_id);
-    MqttTask::event_handler_cb(static_cast<esp_mqtt_event_handle_t>(event_data));
-}
-
-esp_err_t MqttTask::event_handler_cb(esp_mqtt_event_handle_t event) {
+    auto *event = static_cast<esp_mqtt_event_handle_t>(event_data);
     esp_mqtt_client_handle_t client = event->client;
+
     int msg_id;
 
     switch (event->event_id) {
@@ -54,6 +53,7 @@ esp_err_t MqttTask::event_handler_cb(esp_mqtt_event_handle_t event) {
             ESP_LOGI(TAG, "MQTT_EVENT_DATA");
             printf("TOPIC=%.*s\r\n", event->topic_len, event->topic);
             printf("DATA=%.*s\r\n", event->data_len, event->data);
+            queue->add(11, 1, DeviceState::ON);
             break;
         case MQTT_EVENT_ERROR:
             ESP_LOGI(TAG, "MQTT_EVENT_ERROR");
@@ -62,6 +62,4 @@ esp_err_t MqttTask::event_handler_cb(esp_mqtt_event_handle_t event) {
             ESP_LOGI(TAG, "Other event id:%d", event->event_id);
             break;
     }
-
-    return ESP_OK;
 }

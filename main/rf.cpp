@@ -7,6 +7,7 @@
 #include "Async.h"
 #include "MqttTask.h"
 #include "LivoloRFTask.h"
+#include "MqttQueue.h"
 #include <nvs.h>
 #include <nvs_flash.h>
 
@@ -36,19 +37,39 @@ void app_main() {
     }
     ESP_ERROR_CHECK(ret);
 
+    auto *queue = new MqttQueue();
+//    queue->add(11, 1, DeviceState::ON);
+//
+//    auto *event = new MqttEvent(22,2, DeviceState::OFF);
+//    queue->add(event);
+//
+//    delete event;
+
+//    event = queue->pop();
+//    ESP_LOGI(TAG, "%i", event->remoteId);
+//    delete event;
+//
+//    event = queue->pop();
+//    ESP_LOGI(TAG, "%i", event->remoteId);
+//    delete event;
+
     auto wifiTask = new WifiTask(IT_WIFI_SSID, IT_WIFI_PASS);
     wifiTask->run();
     wifiTask->wait_until_connected(10 * 1000);
 
     ESP_LOGI(TAG, "Connected? %i", wifiTask->isConnected());
 
-    xQueueHandle mqtt_queue = xQueueCreate(QUEUE_SIZE, sizeof(publish_message_t));
 
-//    auto mqttTask = new MqttTask("mqtt://80.241.216.84");
+    auto mqttTask = new MqttTask("mqtt://80.241.216.84", queue);
 //    mqttTask->run();
+    xTaskCreate(MqttTask::runAsync, "mqtt_task", 1 << 14 /* 16384 */, mqttTask, 5, nullptr);
 
-    auto livolo = new LivoloRFTask(static_cast<gpio_num_t>(32));
-    livolo->sendSignal(19787, 8);
+//    auto livolo = new LivoloRFTask(static_cast<gpio_num_t>(32));
+//    livolo->sendSignal(19787, 8);
+
+    auto *event = queue->pop();
+    ESP_LOGI(TAG, "%i", event->remoteId);
+    delete event;
 
     auto *async = new Async();
     xTaskCreate(Async::runAsync, "uart_read_task", 1 << 14 /* 16384 */, async, 5, NULL);
