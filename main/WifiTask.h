@@ -1,5 +1,5 @@
-#ifndef HELLO_WORLD_WIFITASK_H
-#define HELLO_WORLD_WIFITASK_H
+#ifndef RF_BRIDGE_WIFITASK_H
+#define RF_BRIDGE_WIFITASK_H
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/event_groups.h>
@@ -30,4 +30,4 @@ private:
 };
 
 
-#endif //HELLO_WORLD_WIFITASK_H
+#endif //RF_BRIDGE_WIFITASK_H

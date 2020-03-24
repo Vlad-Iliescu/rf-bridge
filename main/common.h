@@ -1,5 +1,5 @@
-#ifndef HELLO_WORLD_COMMON_H
-#define HELLO_WORLD_COMMON_H
+#ifndef RF_BRIDGE_COMMON_H
+#define RF_BRIDGE_COMMON_H
 
 #include "sdkconfig.h"
 
@@ -10,4 +10,4 @@
 #define WIFI_STA_CONNECTED_BIT BIT1
 #define WIFI_STA_DISCONNECTED_BIT BIT2
 
-#endif //HELLO_WORLD_COMMON_H
+#endif //RF_BRIDGE_COMMON_H

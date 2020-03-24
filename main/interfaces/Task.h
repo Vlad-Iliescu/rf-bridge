@@ -1,5 +1,5 @@
-#ifndef HELLO_WORLD_TASK_H
-#define HELLO_WORLD_TASK_H
+#ifndef RF_BRIDGE_TASK_H
+#define RF_BRIDGE_TASK_H
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
@@ -12,4 +12,4 @@ public:
     static void runAsync(void *self);
 };
 
-#endif //HELLO_WORLD_TASK_H
+#endif //RF_BRIDGE_TASK_H

@@ -1,5 +1,5 @@
-#ifndef HELLO_WORLD_MQTTTASK_H
-#define HELLO_WORLD_MQTTTASK_H
+#ifndef RF_BRIDGE_MQTTTASK_H
+#define RF_BRIDGE_MQTTTASK_H
 
 #include "interfaces/Task.h"
 #include "mqtt_client.h"
@@ -20,4 +20,4 @@ private:
 };
 
 
-#endif //HELLO_WORLD_MQTTTASK_H
+#endif //RF_BRIDGE_MQTTTASK_H

@@ -1,5 +1,5 @@
-#ifndef HELLO_WORLD_MQTTEVENT_H
-#define HELLO_WORLD_MQTTEVENT_H
+#ifndef RF_BRIDGE_MQTTEVENT_H
+#define RF_BRIDGE_MQTTEVENT_H
 
 typedef enum {
     OFF = 0,
@@ -21,4 +21,4 @@ public:
 };
 
 
-#endif //HELLO_WORLD_MQTTEVENT_H
+#endif //RF_BRIDGE_MQTTEVENT_H

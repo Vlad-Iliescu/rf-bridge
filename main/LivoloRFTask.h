@@ -1,5 +1,5 @@
-#ifndef HELLO_WORLD_LIVOLORFTASK_H
-#define HELLO_WORLD_LIVOLORFTASK_H
+#ifndef RF_BRIDGE_LIVOLORFTASK_H
+#define RF_BRIDGE_LIVOLORFTASK_H
 
 #include <driver/gpio.h>
 #include "interfaces/Task.h"
@@ -24,4 +24,4 @@ private:
 };
 
 
-#endif //HELLO_WORLD_LIVOLORFTASK_H
+#endif //RF_BRIDGE_LIVOLORFTASK_H

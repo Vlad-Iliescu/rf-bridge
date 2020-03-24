@@ -1,5 +1,5 @@
-#ifndef HELLO_WORLD_MQTTQUEUE_H
-#define HELLO_WORLD_MQTTQUEUE_H
+#ifndef RF_BRIDGE_MQTTQUEUE_H
+#define RF_BRIDGE_MQTTQUEUE_H
 
 #include <freertos/FreeRTOS.h>
 #include <freertos/queue.h>
@@ -22,4 +22,4 @@ private:
 };
 
 
-#endif //HELLO_WORLD_MQTTQUEUE_H
+#endif //RF_BRIDGE_MQTTQUEUE_H
