@@ -92,5 +92,5 @@ void LivoloRFTask::selectPulse(byte bit) {
 }
 
 void LivoloRFTask::run() {
-
+    vTaskDelete(nullptr);
 }

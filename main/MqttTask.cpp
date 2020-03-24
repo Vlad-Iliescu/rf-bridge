@@ -1,13 +1,13 @@
 #include <esp_log.h>
 #include "MqttTask.h"
 
-#define TAG "MQTT"
+#define TAG "[MQTT]"
 
 void MqttTask::run() {
     ESP_LOGI(TAG, "Starting MQTT .....");
 
     esp_mqtt_client_config_t mqtt_cfg = {
-            .uri = this->url,
+            .uri = this->url
     };
 
     esp_mqtt_client_handle_t client = esp_mqtt_client_init(&mqtt_cfg);

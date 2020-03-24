@@ -1,24 +1,11 @@
+#include <esp_log.h>
 #include "MqttQueue.h"
-#include "esp_log.h"
+#include "common.h"
 
 #define TAG "[MQTT_QUEUE]"
 
-MqttEvent::MqttEvent(unsigned int remoteId, unsigned char key, DeviceState state) : remoteId(remoteId), key(key),
-                                                                                    state(state) {
-    ESP_LOGW(TAG, "INIT");
-}
-
-MqttEvent::~MqttEvent() {
-    ESP_LOGW(TAG, "END");
-}
-
-MqttEvent::MqttEvent() {
-    ESP_LOGW(TAG, "INIT");
-};
-
-
 MqttQueue::MqttQueue() {
-    this->queue = xQueueCreate(QUEUE_SIZE, sizeof(MqttEvent*));
+    this->queue = xQueueCreate(IT_QUEUE_SIZE, sizeof(MqttEvent*));
 
     ESP_ERROR_CHECK(this->queue == nullptr ? ESP_FAIL : ESP_OK);
     ESP_LOGI(TAG, "Queue initialised!");
@@ -39,4 +26,8 @@ MqttEvent *MqttQueue::pop() {
         return event;
     }
     return nullptr;
+}
+
+MqttQueue::~MqttQueue() {
+    vQueueDelete(this->queue);
 }

@@ -1,25 +1,19 @@
 idf_component_register(SRCS
-        "rf.cpp"
-        interfaces/Task.h
-        interfaces/Task.cpp
+        common.h
+        main.cpp
 
-        Async.h
-        Async.cpp
-
-        MqttTask.h
-        MqttTask.cpp
-
-        LivoloRFTask.h
-        LivoloRFTask.cpp
-
+        MqttEvent.h
+        MqttEvent.cpp
         MqttQueue.h
         MqttQueue.cpp
 
-        "livolo.h"
-        "livolo.cpp"
-        "reset_task.h"
-        "reset_task.cpp"
-        common.h
+        interfaces/Task.h
+        interfaces/Task.cpp
         WifiTask.h
         WifiTask.cpp
+        MqttTask.h
+        MqttTask.cpp
+        LivoloRFTask.h
+        LivoloRFTask.cpp
+
         INCLUDE_DIRS "")

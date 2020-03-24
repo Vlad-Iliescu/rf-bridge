@@ -14,7 +14,7 @@ public:
 private:
     const char *url;
 
-    MqttQueue *queue;
+    MqttQueue *queue = nullptr;
 
     static void event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data);
 };

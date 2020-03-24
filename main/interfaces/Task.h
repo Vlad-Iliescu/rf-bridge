@@ -1,9 +1,9 @@
 #ifndef HELLO_WORLD_TASK_H
 #define HELLO_WORLD_TASK_H
 
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 #include "../common.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 
 class Task {
 public:
