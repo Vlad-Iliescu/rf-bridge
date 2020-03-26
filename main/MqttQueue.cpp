@@ -5,7 +5,7 @@
 #define TAG "[MQTT_QUEUE]"
 
 MqttQueue::MqttQueue() {
-    this->queue = xQueueCreate(IT_QUEUE_SIZE, sizeof(MqttEvent*));
+    this->queue = xQueueCreate(IT_QUEUE_SIZE, sizeof(MqttEvent *));
 
     ESP_ERROR_CHECK(this->queue == nullptr ? ESP_FAIL : ESP_OK);
     ESP_LOGI(TAG, "Queue initialised!");
@@ -30,4 +30,16 @@ MqttEvent *MqttQueue::pop() {
 
 MqttQueue::~MqttQueue() {
     vQueueDelete(this->queue);
+}
+
+esp_err_t MqttQueue::add(const char *json) {
+    auto *root = cJSON_Parse(json);
+
+    int remoteId = cJSON_GetObjectItem(root, "remoteId")->valueint;
+    unsigned char key = cJSON_GetObjectItem(root, "key")->valueint;
+    DeviceState state = cJSON_IsTrue(cJSON_GetObjectItem(root, "state")) ? DeviceState::ON : DeviceState::OFF;
+
+    cJSON_Delete(root);
+
+    return this->add(remoteId, key, state);
 }

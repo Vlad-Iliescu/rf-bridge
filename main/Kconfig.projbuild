@@ -18,13 +18,25 @@ menu "RF Bridge"
             Your router SSID. The Wifi network the device will connect to
 
     config WIFI_PASS
-        string "PASS"
+        string "WIFI_PASS"
         default "pass"
         help
             The Wifi password where the device will connect to
 
+    config MQTT_HOST
+        string "MQTT_HOST"
+        default "mqtt://127.0.0.1"
+        help
+            Host to the mqtt broker, must contain "mqtt://"
+
+    config MQTT_TOPIC
+        string "MQTT_TOPIC"
+        default "lights/switch"
+        help
+            Host to the mqtt broker, must contain "mqtt://"
+
     config MQTT_QUEUE_SIZE
-        int "QUEUE_SIZE"
+        int "MQTT_QUEUE_SIZE"
         default 10
         help
             The max size of the mqtt queue

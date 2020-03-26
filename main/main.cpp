@@ -33,7 +33,7 @@ void app_main() {
     ESP_LOGI(TAG, "Connected? %i", wifiTask->isConnected());
 
     auto queue = MqttQueue();
-    auto mqttTask = MqttTask("mqtt://80.241.216.84", &queue);
+    auto mqttTask = MqttTask(IT_MQTT_HOST, &queue);
     xTaskCreate(MqttTask::runAsync, "mqtt_task", 1 << 14 /* 16384 */, &mqttTask, 5, nullptr);
 
     auto livolo = LivoloRFTask(static_cast<gpio_num_t>(IT_RF_GPIO));
